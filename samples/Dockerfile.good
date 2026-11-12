@@ -1,0 +1,10 @@
+FROM golang:1.24@sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef AS build
+WORKDIR /src
+COPY . .
+RUN CGO_ENABLED=0 go build -o /app .
+
+FROM gcr.io/distroless/static@sha256:fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210
+COPY --from=build /app /app
+USER 65532:65532
+HEALTHCHECK --interval=30s CMD ["/app", "-health"]
+ENTRYPOINT ["/app"]

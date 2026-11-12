@@ -1,0 +1,9 @@
+FROM ubuntu:latest
+ENV DB_PASSWORD=hunter2
+ARG API_TOKEN=abc123
+ADD https://example.com/tool.tar.gz /opt/
+RUN apt-get update && apt-get install -y curl sudo \
+    && curl -fsSL https://example.com/install.sh | bash
+RUN chmod 777 /opt && curl -k https://self-signed.example/file -o /tmp/f
+EXPOSE 22 8080
+CMD ["/opt/app"]
